@@ -318,6 +318,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\StoreFront.DATA.EF\StoreFront.DATA.EF.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="wwwroot\plugins\themefisher-font\selection.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
