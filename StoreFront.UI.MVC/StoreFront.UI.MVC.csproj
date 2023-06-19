@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Shared\OriginalLayout.cshtml" />
+    <Content Remove="wwwroot\css\bootstrap.min.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +22,7 @@
     <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Views\_ViewImports.cshtml" />
     <None Include="Views\_ViewStart.cshtml" />
+    <None Include="wwwroot\css\bootstrap.min.css" />
     <None Include="wwwroot\css\style.css.map" />
     <None Include="wwwroot\fonts\ElegantIcons.svg" />
     <None Include="wwwroot\fonts\fontawesome-webfont.svg" />
@@ -74,6 +76,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
+    <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
