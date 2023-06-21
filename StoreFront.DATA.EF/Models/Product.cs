@@ -22,8 +22,8 @@ namespace StoreFront.DATA.EF.Models
         public string? ProductImage { get; set; }
 
         public virtual Builder? Builder { get; set; }
-        public virtual Status Status { get; set; } = null!;
-        public virtual Type Type { get; set; } = null!;
+        public virtual Status? Status { get; set; }
+        public virtual Type? Type { get; set; }
         public virtual ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }
