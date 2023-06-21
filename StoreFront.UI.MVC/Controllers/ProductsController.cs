@@ -6,19 +6,29 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using StoreFront.DATA.EF.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Drawing;
+using StoreFront.UI.MVC.Utilities;
 
 namespace StoreFront.UI.MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
         private readonly GuitarShopContext _context;
 
-        public ProductsController(GuitarShopContext context)
+        //This field stores server folder structure info to facillitate image saving.
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public ProductsController(GuitarShopContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
+
         }
 
         // GET: Products
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var guitarShopContext = _context.Products.Where(p => p.Status.Status1 != "Display-Only" && p.UnitsInStock != 0).Include(p => p.Builder).Include(p => p.Status).Include(p => p.Type);
@@ -26,6 +36,7 @@ namespace StoreFront.UI.MVC.Controllers
         }
 
         // GET: Products/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Products == null)
@@ -60,10 +71,58 @@ namespace StoreFront.UI.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ProductName,ProductDesc,UnitsInStock,SellPrice,PurchasePrice,TypeId,StatusId,BuilderId,ProductImage")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,ProductName,ProductDesc,UnitsInStock,SellPrice,PurchasePrice,TypeId,StatusId,BuilderId,ProductImage,Image")] Product product)
         {
             if (ModelState.IsValid)
             {
+                //Check to see if an Image was uploaded
+
+                if (product.Image != null)
+                {
+                    //Retrive the uploaded file extension
+                    string ext = Path.GetExtension(product.Image.FileName);
+
+                    //Valid image extensions for upload verification
+                    string[] validExts = { ".jpg", ".jpeg", ".gif", ".png" };
+
+                    //Verify that the uploaded file has an approaved extension and meets size criteria
+                    //TODO: Maybe move this into a method that can be shared with the edit image upload.
+
+                    if (validExts.Contains(ext.ToLower()) && product.Image.Length < 4_194_303)
+                    {
+                        //Create GUID file name
+                        product.ProductImage = Guid.NewGuid() + ext;
+
+                        //create holder for the Web Root path
+
+                        string webRootPath = _webHostEnvironment.WebRootPath;
+
+                        //use the above to create the full path for image storage
+                        string fullImagePath = webRootPath + "/img/";
+
+                        //open a MemoryStream to read the image into memory
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            //Transfer the file to Memory
+                            await product.Image.CopyToAsync(memoryStream);
+
+                            using (var img = Image.FromStream(memoryStream))
+                            {
+                                int maxImageSize = 500;
+                                int maxThumbSize = 100;
+
+                                ImageUtility.ResizeImage(fullImagePath,product.ProductImage,img,maxImageSize,maxThumbSize);
+                            }
+
+
+                        }
+                    }
+
+                }
+                else
+                {
+                    product.ProductImage = "noimage.png";
+                }
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
