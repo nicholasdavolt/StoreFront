@@ -111,7 +111,7 @@ namespace StoreFront.UI.MVC.Controllers
                                 int maxImageSize = 500;
                                 int maxThumbSize = 100;
 
-                                ImageUtility.ResizeImage(fullImagePath,product.ProductImage,img,maxImageSize,maxThumbSize);
+                                ImageUtility.ResizeImage(fullImagePath, product.ProductImage, img, maxImageSize, maxThumbSize);
                             }
 
 
@@ -157,7 +157,7 @@ namespace StoreFront.UI.MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,ProductDesc,UnitsInStock,SellPrice,PurchasePrice,TypeId,StatusId,BuilderId,ProductImage")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,ProductDesc,UnitsInStock,SellPrice,PurchasePrice,TypeId,StatusId,BuilderId,ProductImage,Image")] Product product)
         {
             if (id != product.Id)
             {
@@ -166,6 +166,56 @@ namespace StoreFront.UI.MVC.Controllers
 
             if (ModelState.IsValid)
             {
+
+
+                //Retain the existing image file name for future deletion
+                string oldImageName = product.ProductImage;
+
+                if (product.Image != null)
+                {
+                    
+
+                    string ext = Path.GetExtension(product.Image.FileName);
+
+                    long imgLength = product.Image.Length;
+
+                    //Verify image extension and length, if valid proceed with upload
+                    if (ImageVerify(ext, imgLength))
+                    {
+                        //Generate a unique file name
+
+                        product.ProductImage = Guid.NewGuid() + ext;
+
+                        //Build the full path for image upload
+                        string webRootPath = _webHostEnvironment.WebRootPath;
+
+                        string fullPath = webRootPath + "/img/";
+
+                        //If necessary, delete the old image
+
+                        if (oldImageName != "noimage.png")
+                        {
+                            ImageUtility.Delete(fullPath, oldImageName);
+                        }
+
+                        //Save the new image to the server
+
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await product.Image.CopyToAsync(memoryStream);
+
+                            using (var img = Image.FromStream(memoryStream))
+                            {
+                                int maxImageSize = 500;
+                                int maxThumbSize = 100;
+
+                                ImageUtility.ResizeImage(fullPath, product.ProductImage, img, maxImageSize, maxThumbSize);
+                            }
+                        }
+                    }
+                }
+
+                
                 try
                 {
                     _context.Update(product);
@@ -225,14 +275,29 @@ namespace StoreFront.UI.MVC.Controllers
             {
                 _context.Products.Remove(product);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(int id)
         {
-          return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        public bool ImageVerify(string ext, long imgLength)
+        {
+            //Valid image extensions for upload verification
+            string[] validExts = { ".jpg", ".jpeg", ".gif", ".png" };
+
+            if (validExts.Contains(ext.ToLower()) && imgLength < 4_194_303)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
