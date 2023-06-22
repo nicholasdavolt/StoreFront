@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using StoreFront.DATA.EF.Models;
 
 namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
 {
@@ -97,6 +98,42 @@ namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            //The below is added to collect additional UserDetails
+
+            [Required(ErrorMessage = "*First Name is required")]
+            [StringLength(50, ErrorMessage = "*Max 50 characters")]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; } = null!;
+
+            [Required(ErrorMessage = "*Last Name is required")]
+            [StringLength(50, ErrorMessage = "*Max 50 characters")]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; } = null!;
+
+            [Required(ErrorMessage = "*Address is required")]
+            [StringLength(150, ErrorMessage = "*Max 150 characters")]
+            public string? Address { get; set; }
+
+            [Required(ErrorMessage = "*City is required")]
+            [StringLength(50, ErrorMessage = "*Max 50 characters")]
+            public string? City { get; set; }
+
+            [Required(ErrorMessage = "*State is required")]
+            [StringLength(2, ErrorMessage = "*Must be 02 characters")]
+            public string? State { get; set; }
+
+
+            [Required(ErrorMessage = "*Zip is required")]
+            [StringLength(5, ErrorMessage = "*must be 05 characters")]
+            [DataType(DataType.PostalCode)]
+            public string? Zip { get; set; }
+
+
+            [Required(ErrorMessage = "*Phone is required")]
+            [StringLength(24, ErrorMessage = "*Max 24 characters")]
+            [DataType(DataType.PhoneNumber)]
+            public string? Phone { get; set; }
         }
 
 
@@ -123,6 +160,30 @@ namespace StoreFront.UI.MVC.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
+                    #region Extended User Details
+                    GuitarShopContext _context = new GuitarShopContext();
+
+                    //Instantiate the new UserDetail object
+
+                    UserDetail userDetail = new UserDetail()
+                    {
+                        Id = userId,
+                        FristName = Input.FirstName,
+                        LastName = Input.LastName,
+                        Address = Input.Address,
+                        City = Input.City,
+                        State = Input.State,
+                        Zip = Input.Zip,
+                        Phone = Input.Phone,
+                    };
+
+                    //Add the record to the context
+
+                    _context.UserDetails.Add(userDetail);
+
+                    //Save to the database
+                    _context.SaveChanges();
+                    #endregion
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

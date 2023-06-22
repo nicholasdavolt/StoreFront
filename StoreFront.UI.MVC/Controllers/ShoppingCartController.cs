@@ -90,6 +90,7 @@ namespace StoreFront.UI.MVC.Controllers
                 shoppingCart.Add(product.Id, civm);
             }
 
+            
             //Updates the Session with the updated cart info
 
             string jsonCart = JsonConvert.SerializeObject(shoppingCart);
@@ -148,6 +149,61 @@ namespace StoreFront.UI.MVC.Controllers
             HttpContext.Session.SetString("cart", jsonCart);
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> SubmitOrder()
+        {
+            //Retrieve the User's ID
+
+            string? userId = (await _userManager.GetUserAsync(HttpContext.User))?.Id;
+
+            //Using the above Id, collect the user's details
+            UserDetail ud = _context.UserDetails.Find(userId);
+
+            //Creates the order object
+
+            Order o = new Order()
+            {
+                OrderDate = DateTime.Now,
+                UserId = userId,
+                ShipToName = ud.FullName,
+                ShipCity = ud.City,
+                ShipState = ud.State,
+                ShipZip = ud.Zip
+            };
+
+            //Add the new order item to the context
+            _context.Orders.Add(o);
+
+            //Retrieve the cart from the session
+            var sessionCart = HttpContext.Session.GetString("cart");
+
+            //Convert from JSON to Dictionary
+            Dictionary<int, CartItemViewModel> shoppingCart = JsonConvert.DeserializeObject<Dictionary<int, CartItemViewModel>>(sessionCart);
+
+            //Create the OrderProduct object for each item in the cart and add to the existing context
+            foreach (var item in shoppingCart)
+            {
+                OrderProduct op = new OrderProduct()
+                {
+                    OrderId = o.Id,
+                    ProductId = item.Key,
+                    ProductPrice = (decimal)item.Value.Product.SellPrice,
+                    Quantity = (short)item.Value.Qty
+
+
+                };
+                
+                o.OrderProducts.Add(op);
+            }
+            //Commits changes to the database
+            _context.SaveChanges();
+            //Clear the Cart
+            HttpContext.Session.Remove("cart");
+            //Redirect the user to the Orders Index
+            return RedirectToAction("Index", "Orders");
+
+
         }
 
 
