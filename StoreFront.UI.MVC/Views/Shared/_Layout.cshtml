@@ -1,4 +1,14 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json
+
+
+
+
+
+
+<!DOCTYPE html>
 <html lang="zxx">
 
 <head>
@@ -7,13 +17,15 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>@ViewData["Title"] | SPYDERS!!!!</title>
+    <title>@ViewData["Title"] | Fine Stringed Instruments</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
           rel="stylesheet">
 
     <!-- Css Styles -->
+    <!-- Datatables CSS-->
+    <link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/elegant-icons.css" type="text/css">
     <link rel="stylesheet" href="~/css/magnific-popup.css" type="text/css">
@@ -36,20 +48,18 @@
         <div class="offcanvas__option">
             <div class="offcanvas__links">
                 <p>
-                <a href="#">FAQs</a>
+                @*<a href="#">FAQs</a>*@
             </div>
-            <div class="offcanvas__top__hover">
+            @*<div class="offcanvas__top__hover">
                 <span>Usd <i class="arrow_carrot-down"></i></span>
                 <ul>
                     <li>USD</li>
                     <li>EUR</li>
                     <li>USD</li>
                 </ul>
-            </div>
+            </div>*@
         </div>
         <div class="offcanvas__nav__option">
-            <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-            <a href="#"><img src="img/icon/heart.png" alt=""></a>
             <a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
             <div class="price">$0.00</div>
         </div>
@@ -64,16 +74,15 @@
         <div class="header__top">
             <div class="container ">
                 <div class="row">
-                    <div class="col-lg-6 col-md-7">
+                    <div class="col-lg-6 col-md-5">
                         <div class="header__top__left">
                             <p>Free shipping, 30-day return or refund guarantee.</p>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-5">
+                    <div class="col-lg-6 col-md-7">
                         <div class="header__top__right">
                             <div class="header__top__links">
                                 <partial name="_LoginPartial" />
-                                <a href="#">FAQs</a>
                             </div>
                             @*<div class="header__top__hover">
                                 <span>Usd <i class="arrow_carrot-down"></i></span>
@@ -92,35 +101,69 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="header__logo">
-                        <a href="~/"><img src="~/img/logo.png" alt=""></a>
+                        <h3 style="font-family: Lucida Handwriting, Cursive">Fine Stringed Instruments</h3>
+                        
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <nav class="header__menu mobile-menu">
                         <ul>
-                            <li class="active"><a href="./index.html">Home</a></li>
+                            <li><a asp-action="Index" asp-controller="Home">Home</a></li>
                             <li><a href="./shop.html">Shop</a></li>
                             <li>
-                                <a href="#">Pages</a>
+                                <a href="#">Site Administration</a>
                                 <ul class="dropdown">
-                                    <li><a href="./about.html">About Us</a></li>
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                    <li><a asp-action="Index" asp-controller="Products">Products</a></li>
+                                    <li><a asp-action="Index" asp-controller="Orders">Orders</a></li>
+                                    <li><a asp-action="Index" asp-controller="Builders">Builders</a></li>
+                                    <li><a asp-action="Index" asp-controller="Types">Types</a></li>
+                                    <li><a href="#">User Managment</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contacts</a></li>
+                            <li><a asp-action="Contact" asp-controller="Home">Contact Us</a></li>
                         </ul>
                     </nav>
                 </div>
+
+                @{
+                    //Create a bool to determin if there are items in the cart
+                    bool cartHasProducts = false;
+
+                    //Create a variable to store the number of products
+                    int productCount = 0;
+                    decimal productPrice = 0;
+
+                    //Check if the cart exists in the session
+                    if (!String.IsNullOrEmpty(Context.Session.GetString("cart")))
+                    {
+                        //If so, there are items in the cart
+                        cartHasProducts = true;
+                        //Create the dictionary to store the cart items
+                        var products = new Dictionary<int, CartItemViewModel>();
+
+                        //Deserialize the session cart &Aacute; store the contents in the ditionary
+
+                        products = JsonConvert.DeserializeObject<Dictionary<int, CartItemViewModel>>(Context.Session.GetString("cart"));
+
+                        //Create a variable and assign the sum of the Qty of Cart Items
+                        productCount = products.Sum(p => p.Value.Qty);
+                       productPrice = (decimal)(products.Sum(p => p.Value.Qty * p.Value.Product.SellPrice));
+                    }
+                }
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
-                        <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
-                        <a href="#"><img src="img/icon/heart.png" alt=""></a>
-                        <a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
-                        <div class="price">$0.00</div>
+                        
+                        <a asp-action="Index" asp-controller="ShoppingCart"><img src="img/icon/cart.png" alt=""> @if (cartHasProducts)
+                            {
+                                <span>@productCount</span>
+
+                            }
+                            else
+                            {
+                                <span>0</span>
+                            }
+                        </a>
+                        <div class="price">@String.Format($"{productPrice:c}")</div>
                     </div>
                 </div>
             </div>
@@ -216,9 +259,12 @@
     <script src="~/js/jquery.magnific-popup.min.js"></script>
     <script src="~/js/jquery.countdown.min.js"></script>
     <script src="~/js/jquery.slicknav.js"></script>
+    <!-- Datatables js-->
+    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="~/js/mixitup.min.js"></script>
     <script src="~/js/owl.carousel.min.js"></script>
     <script src="~/js/main.js"></script>
+    <script>let table = new DataTable('.table')</script>
 
     @RenderSection("scripts", required: false)
 </body>
