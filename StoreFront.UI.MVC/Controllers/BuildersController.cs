@@ -117,42 +117,59 @@ namespace StoreFront.UI.MVC.Controllers
             return View(builder);
         }
 
-        // GET: Builders/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        //AJAX based deletion
+        [AcceptVerbs("POST")]
+        
+        public JsonResult AjaxDelete(int id)
         {
-            if (id == null || _context.Builders == null)
-            {
-                return NotFound();
-            }
+            Builder builder = _context.Builders.Find(id);
 
-            var builder = await _context.Builders
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (builder == null)
-            {
-                return NotFound();
-            }
+            _context.Builders.Remove(builder);
 
-            return View(builder);
+            _context.SaveChanges();
+
+            string confirmMessage = $"Deleted {builder.Builder1} from the database!";
+
+            return Json(new { id = id, message = confirmMessage });
+
         }
 
-        // POST: Builders/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Builders == null)
-            {
-                return Problem("Entity set 'GuitarShopContext.Builders'  is null.");
-            }
-            var builder = await _context.Builders.FindAsync(id);
-            if (builder != null)
-            {
-                _context.Builders.Remove(builder);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //// GET: Builders/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null || _context.Builders == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var builder = await _context.Builders
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (builder == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(builder);
+        //}
+
+        //// POST: Builders/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    if (_context.Builders == null)
+        //    {
+        //        return Problem("Entity set 'GuitarShopContext.Builders'  is null.");
+        //    }
+        //    var builder = await _context.Builders.FindAsync(id);
+        //    if (builder != null)
+        //    {
+        //        _context.Builders.Remove(builder);
+        //    }
+
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool BuilderExists(int id)
         {

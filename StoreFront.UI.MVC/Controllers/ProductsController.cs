@@ -9,6 +9,7 @@ using StoreFront.DATA.EF.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Drawing;
 using StoreFront.UI.MVC.Utilities;
+using X.PagedList;
 
 namespace StoreFront.UI.MVC.Controllers
 {
@@ -28,13 +29,36 @@ namespace StoreFront.UI.MVC.Controllers
         }
 
         // GET: Products
-        [AllowAnonymous]
+        
         public async Task<IActionResult> Index()
         {
             var guitarShopContext = _context.Products.Where(p => p.Status.Status1 != "Display-Only" && p.UnitsInStock != 0).Include(p => p.Builder).Include(p => p.Status).Include(p => p.Type);
             return View(await guitarShopContext.ToListAsync());
         }
+        [AllowAnonymous]
+        public async Task<IActionResult> TiledProducts (string searchTerm, int page = 1)
+        {
+            //Variable for page size
+            int pageSize = 5;
+            var products = _context.Products.Where(p => p.Status.Status1 != "Display-Only" && p.UnitsInStock != 0).Include(p => p.Builder).Include(p => p.Status).Include(p => p.Type).ToList();
 
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                ViewBag.SearchTerm = searchTerm;
+                searchTerm = searchTerm.ToLower();
+                products = products.Where(p => p.ProductName.ToLower().Contains(searchTerm) || p.Builder.Builder1.ToLower().Contains(searchTerm) || p.ProductDesc.ToLower().Contains(searchTerm)).ToList();
+
+                ViewBag.NbrResults = products.Count;
+            }
+            else
+            {
+                ViewBag.NbrResults = null;
+                ViewBag.SearchTerm = null;
+            }
+
+            return View(products.ToPagedList(page, pageSize));
+        }
+       
         // GET: Products/Details/5
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
@@ -108,7 +132,7 @@ namespace StoreFront.UI.MVC.Controllers
 
                             using (var img = Image.FromStream(memoryStream))
                             {
-                                int maxImageSize = 500;
+                                int maxImageSize = 260;
                                 int maxThumbSize = 100;
 
                                 ImageUtility.ResizeImage(fullImagePath, product.ProductImage, img, maxImageSize, maxThumbSize);
@@ -206,7 +230,7 @@ namespace StoreFront.UI.MVC.Controllers
 
                             using (var img = Image.FromStream(memoryStream))
                             {
-                                int maxImageSize = 500;
+                                int maxImageSize = 260;
                                 int maxThumbSize = 100;
 
                                 ImageUtility.ResizeImage(fullPath, product.ProductImage, img, maxImageSize, maxThumbSize);

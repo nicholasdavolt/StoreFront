@@ -9,7 +9,14 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div id="MessageContent" class="text-center"></div>
+
+    </div>
+</div>
+<table class="table" id="BuildersTable">
     <thead>
         <tr>
             <th>
@@ -20,16 +27,44 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        <tr id="Builder-@item.Id">
             <td>
                 @Html.DisplayFor(modelItem => item.Builder1)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @*<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                    <a data-ajax="true" data-ajax-confirm="Are you sure you want to delete @item.Builder1?" data-ajax-failure="deleteFailed" data-ajax-success="deleteConfirmed" data-ajax-method="POST" href="~/Builders/AjaxDelete/@item.Id/">
+                        Delete
+                    </a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+@section scripts {
+
+    <script>
+        //******* AJAX Deletion*****//
+
+        function deleteConfirmed(response, status, data) {
+            //Remove the Category's row from the table
+            let rowId = "#Builder-" + response.id;
+
+            $("#BuildersTable").find(rowId).remove();
+
+            //Display a status message
+            $("#MessageContent").html("<div class='alert alert-success'>" + response.message + "</div>")
+        }
+
+        function deleteFailed(response, status, data) {
+            $("#MessageContent").html("<div class='alert alert-danger'>Delete unsuccessful.</div>")
+        }
+
+    </script>
+    
+
+
+}

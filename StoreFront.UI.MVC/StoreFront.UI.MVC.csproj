@@ -37,26 +37,6 @@
     <None Include="wwwroot\js\main.js" />
     <None Include="wwwroot\js\mixitup.min.js" />
     <None Include="wwwroot\js\owl.carousel.min.js" />
-    <None Include="wwwroot\sass\style.scss" />
-    <None Include="wwwroot\sass\_about.scss" />
-    <None Include="wwwroot\sass\_base.scss" />
-    <None Include="wwwroot\sass\_blog-details.scss" />
-    <None Include="wwwroot\sass\_blog-sidebar.scss" />
-    <None Include="wwwroot\sass\_blog.scss" />
-    <None Include="wwwroot\sass\_breadcrumb.scss" />
-    <None Include="wwwroot\sass\_checkout.scss" />
-    <None Include="wwwroot\sass\_contact.scss" />
-    <None Include="wwwroot\sass\_footer.scss" />
-    <None Include="wwwroot\sass\_header.scss" />
-    <None Include="wwwroot\sass\_hero.scss" />
-    <None Include="wwwroot\sass\_home-page.scss" />
-    <None Include="wwwroot\sass\_mixins.scss" />
-    <None Include="wwwroot\sass\_product.scss" />
-    <None Include="wwwroot\sass\_responsive.scss" />
-    <None Include="wwwroot\sass\_shop-details.scss" />
-    <None Include="wwwroot\sass\_shop.scss" />
-    <None Include="wwwroot\sass\_shopping-cart.scss" />
-    <None Include="wwwroot\sass\_variable.scss" />
     <None Include="wwwroot\Source\bootstrap-4.2.1-dist.zip" />
     <None Include="wwwroot\Source\elegant_font.zip" />
     <None Include="wwwroot\Source\font-awesome-4.7.0.zip" />
@@ -78,6 +58,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
     <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
+    <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.7" />
   </ItemGroup>
 
   <ItemGroup>
