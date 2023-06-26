@@ -73,7 +73,8 @@ namespace StoreFront.DATA.EF.Models//Metadata
 
 		[StringLength(1500, ErrorMessage = "*Max 1500 characters")]
 		[Display(Name = "Description")]
-		public string? ProductDesc { get; set; }
+        [DataType(DataType.MultilineText)]
+        public string? ProductDesc { get; set; }
 
 		[Display(Name = "Units in Stock" )]
 		public short? UnitsInStock { get; set; }

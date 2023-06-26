@@ -141,7 +141,7 @@ namespace StoreFront.UI.MVC.Controllers
 
             //If all goes well, return a view that displays a confirmation to the
             //user that their email was sent.
-            return View("EmailConfirmation", cvm);
+            return View();
         }
 
         public IActionResult Privacy()

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,7 @@ using StoreFront.DATA.EF.Models;
 
 namespace StoreFront.UI.MVC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class OrdersController : Controller
     {
         private readonly GuitarShopContext _context;
@@ -22,6 +25,14 @@ namespace StoreFront.UI.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var guitarShopContext = _context.Orders.Include(o => o.User);
+            return View(await guitarShopContext.ToListAsync());
+        }
+
+        //GET: Orders by User
+        [AllowAnonymous]
+        public async Task<IActionResult> OrderByUser(string id)
+        {
+            var guitarShopContext = _context.Orders.Include(o => o.User).Where(u => u.User.Id.Contains(id));
             return View(await guitarShopContext.ToListAsync());
         }
 
@@ -43,7 +54,7 @@ namespace StoreFront.UI.MVC.Controllers
 
             return View(order);
         }
-
+        [AllowAnonymous]
         // GET: Orders/Create
         public IActionResult Create()
         {

@@ -201,7 +201,7 @@ namespace StoreFront.UI.MVC.Controllers
             //Clear the Cart
             HttpContext.Session.Remove("cart");
             //Redirect the user to the Orders Index
-            return RedirectToAction("Index", "Orders");
+            return RedirectToAction("OrderByUser", "Orders",new {id = userId});
 
 
         }
