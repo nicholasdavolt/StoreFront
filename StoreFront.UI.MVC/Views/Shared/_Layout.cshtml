@@ -26,6 +26,9 @@
     <!-- Css Styles -->
     <!-- Datatables CSS-->
     <link href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <!-- Paged List Style-->
+    <link href="~/css/PagedList.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/font-awesome.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/elegant-icons.css" type="text/css">
     <link rel="stylesheet" href="~/css/magnific-popup.css" type="text/css">
@@ -33,7 +36,6 @@
     <link rel="stylesheet" href="~/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="~/css/style.css" type="text/css">
-    <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css">
 </head>
 
 <body>
@@ -109,9 +111,9 @@
                     <nav class="header__menu mobile-menu">
                         <ul>
                             <li><a asp-action="Index" asp-controller="Home">Home</a></li>
-                            <li><a href="./shop.html">Shop</a></li>
+                            <li><a asp-action="TiledProducts" asp-controller="Products">Shop</a></li>
                             <li>
-                                <a href="#">Site Administration</a>
+                                <a>Site Administration</a>
                                 <ul class="dropdown">
                                     <li><a asp-action="Index" asp-controller="Products">Products</a></li>
                                     <li><a asp-action="Index" asp-controller="Orders">Orders</a></li>
@@ -153,7 +155,7 @@
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
                         
-                        <a asp-action="Index" asp-controller="ShoppingCart"><img src="img/icon/cart.png" alt=""> @if (cartHasProducts)
+                        <a asp-action="Index" asp-controller="ShoppingCart"><img src="~/img/icon/cart.png" alt=""> @if (cartHasProducts)
                             {
                                 <span>@productCount</span>
 
@@ -163,7 +165,7 @@
                                 <span>0</span>
                             }
                         </a>
-                        <div class="price">@String.Format($"{productPrice:c}")</div>
+                        <div class="price m-3">@String.Format($"{productPrice:c}")</div>
                     </div>
                 </div>
             </div>
@@ -181,28 +183,21 @@
                 <div class="col-lg-3 col-md-6 col-sm-6">
                     <div class="footer__about">
                         <div class="footer__logo">
-                            <a href="#"><img src="img/footer-logo.png" alt=""></a>
+                            <h3 class="text-white"style="font-family: Lucida Handwriting, Cursive">Fine Stringed Instruments</h3>
                         </div>
-                        <p>The customer is at the heart of our unique business model, which includes design.</p>
+                        <p>Thank you for visiting if you have any questions, please see our contact page.</p>
                         <a href="#"><img src="img/payment.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>Shopping</h6>
-                        <ul>
-                            <li><a href="#">Clothing Store</a></li>
-                            <li><a href="#">Trending Shoes</a></li>
-                            <li><a href="#">Accessories</a></li>
-                            <li><a href="#">Sale</a></li>
-                        </ul>
-                    </div>
+                    
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-6">
                     <div class="footer__widget">
                         <h6>Shopping</h6>
                         <ul>
-                            <li><a href="#">Contact Us</a></li>
+                            <li>
+                            <li><a asp-action="Contact" asp-controller="Home">Contact Us</a></li></li>
                             <li><a href="#">Payment Methods</a></li>
                             <li><a href="#">Delivary</a></li>
                             <li><a href="#">Return & Exchanges</a></li>
@@ -241,16 +236,7 @@
         </div>
     </footer>
     <!-- Footer Section End -->
-    <!-- Search Begin -->
-    <div class="search-model">
-        <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="search-close-switch">+</div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
-            </form>
-        </div>
-    </div>
-    <!-- Search End -->
+    
     <!-- Js Plugins -->
     <script src="~/js/jquery-3.3.1.min.js"></script>
     <script src="~/js/bootstrap.min.js"></script>
@@ -264,6 +250,8 @@
     <script src="~/js/mixitup.min.js"></script>
     <script src="~/js/owl.carousel.min.js"></script>
     <script src="~/js/main.js"></script>
+    <!-- AJAX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>let table = new DataTable('.table')</script>
 
     @RenderSection("scripts", required: false)

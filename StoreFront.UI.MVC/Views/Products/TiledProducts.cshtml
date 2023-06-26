@@ -1,0 +1,143 @@
+﻿@model IPagedList<StoreFront.DATA.EF.Models.Product>
+@using X.PagedList.Mvc.Core
+@using X.PagedList
+
+@{
+    ViewData["Title"] = "TiledProducts";
+}
+
+
+
+<section class="shop spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="shop__sidebar">
+                    <div class="shop__sidebar__search">
+                        <form asp-action="TiledProducts" method="get">
+                            <input name="searchTerm" class="form-control text-center" placeholder="Search...">
+                            <input type="submit" value="Search" class="btn btn-dark text-center w-50 d-block centered mt-2"
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="col-lg-9">
+                
+                <div class="row">
+
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+
+                            <div class="product__item">
+                                <div class="product__item__pic set-bg" data-setbg="/img/@item.ProductImage">
+                                </div>
+                                <div class="product__item__text">
+                                    <h6>@item.ProductName</h6>
+                                    <a asp-action="AddToCart" asp-controller="ShoppingCart" asp-route-id="@item.Id" class="add-cart">+ Add To Cart</a>
+
+                                    <h5>@Html.DisplayFor(modelItem => item.SellPrice)</h5>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    
+                    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    @*Paged list*@
+    <div class="row mt-5">
+        <div class="w-50 mx-auto text-center">
+            <p>
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            </p>
+
+            <div class="w-100">
+                @Html.PagedListPager(
+                Model,
+                page => Url.Action("TiledProducts",
+                new {page, searchTerm = ViewBag.SearchTerm})
+                )
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@*<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductDesc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitsInStock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SellPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PurchasePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Builder)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductDesc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnitsInStock)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PurchasePrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductImage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Builder.Builder1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type.Type1)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>*@
