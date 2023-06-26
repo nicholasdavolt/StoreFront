@@ -32,7 +32,7 @@ namespace StoreFront.UI.MVC.Controllers
         
         public async Task<IActionResult> Index()
         {
-            var guitarShopContext = _context.Products.Where(p => p.Status.Status1 != "Display-Only" && p.UnitsInStock != 0).Include(p => p.Builder).Include(p => p.Status).Include(p => p.Type);
+            var guitarShopContext = _context.Products.Include(p => p.Builder).Include(p => p.Status).Include(p => p.Type);
             return View(await guitarShopContext.ToListAsync());
         }
         [AllowAnonymous]
@@ -85,7 +85,7 @@ namespace StoreFront.UI.MVC.Controllers
         public IActionResult Create()
         {
             ViewData["BuilderId"] = new SelectList(_context.Builders, "Id", "Builder1");
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Id");
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Status1");
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Type1");
             return View();
         }
@@ -132,7 +132,7 @@ namespace StoreFront.UI.MVC.Controllers
 
                             using (var img = Image.FromStream(memoryStream))
                             {
-                                int maxImageSize = 260;
+                                int maxImageSize = 500;
                                 int maxThumbSize = 100;
 
                                 ImageUtility.ResizeImage(fullImagePath, product.ProductImage, img, maxImageSize, maxThumbSize);
@@ -152,7 +152,7 @@ namespace StoreFront.UI.MVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BuilderId"] = new SelectList(_context.Builders, "Id", "Builder1", product.BuilderId);
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Id", product.StatusId);
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Status1", product.StatusId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Type1", product.TypeId);
             return View(product);
         }
@@ -171,7 +171,7 @@ namespace StoreFront.UI.MVC.Controllers
                 return NotFound();
             }
             ViewData["BuilderId"] = new SelectList(_context.Builders, "Id", "Builder1", product.BuilderId);
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Id", product.StatusId);
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Status1", product.StatusId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Type1", product.TypeId);
             return View(product);
         }
@@ -259,7 +259,7 @@ namespace StoreFront.UI.MVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BuilderId"] = new SelectList(_context.Builders, "Id", "Builder1", product.BuilderId);
-            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Id", product.StatusId);
+            ViewData["StatusId"] = new SelectList(_context.Statuses, "Id", "Status1", product.StatusId);
             ViewData["TypeId"] = new SelectList(_context.Types, "Id", "Type1", product.TypeId);
             return View(product);
         }

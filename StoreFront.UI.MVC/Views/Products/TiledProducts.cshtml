@@ -3,7 +3,7 @@
 @using X.PagedList
 
 @{
-    ViewData["Title"] = "TiledProducts";
+    ViewData["Title"] = "Shop";
 }
 
 
@@ -16,7 +16,7 @@
                     <div class="shop__sidebar__search">
                         <form asp-action="TiledProducts" method="get">
                             <input name="searchTerm" class="form-control text-center" placeholder="Search...">
-                            <input type="submit" value="Search" class="btn btn-dark text-center w-50 d-block centered mt-2"
+                            <input type="submit" value="Search" class="btn btn-dark text-center w-50 d-block centered mt-2" />
                         </form>
                     </div>
                     
@@ -31,7 +31,8 @@
                         <div class="col-lg-4 col-md-6 col-sm-6">
 
                             <div class="product__item">
-                                <div class="product__item__pic set-bg" data-setbg="/img/@item.ProductImage">
+                                <div class="product__item__pic set-bg" >
+                                    <a asp-action="Details" asp-controller="Products" asp-route-id="@item.Id"><img src="~/img/@item.ProductImage" class="img-fluid"></a>
                                 </div>
                                 <div class="product__item__text">
                                     <h6>@item.ProductName</h6>

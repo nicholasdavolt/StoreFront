@@ -4,18 +4,13 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>Product</h4>
+<div class="col-md-6 offset-md-3">
+    <h1 class="">@Html.DisplayFor(model => model.ProductName)</h1>
+    <img src="~/img/@Model.ProductImage" class="img-fluid" />
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductName)
-        </dd>
+        
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ProductDesc)
         </dt>
@@ -34,18 +29,18 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.SellPrice)
         </dd>
-        <dt class = "col-sm-2">
+        @*<dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.PurchasePrice)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PurchasePrice)
-        </dd>
-        <dt class = "col-sm-2">
+        </dd>*@
+        @*<dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ProductImage)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ProductImage)
-        </dd>
+        </dd>*@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Builder)
         </dt>
@@ -56,7 +51,7 @@
             @Html.DisplayNameFor(model => model.Status)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status.Id)
+            @Html.DisplayFor(model => model.Status.Status1)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Type)

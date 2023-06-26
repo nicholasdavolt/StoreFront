@@ -62,12 +62,12 @@
             </div>*@
         </div>
         <div class="offcanvas__nav__option">
-            <a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
+            <a href="#"><img src="~/img/icon/cart.png" alt=""> <span>0</span></a>
             <div class="price">$0.00</div>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
-            <p>Free shipping, 30-day return or refund guarantee.</p>
+            <p>This site is made for demonstration purposes. No products are actually for sale.</p>
         </div>
     </div>
     <!-- Offcanvas Menu End -->
@@ -78,7 +78,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-5">
                         <div class="header__top__left">
-                            <p>Free shipping, 30-day return or refund guarantee.</p>
+                            <p>This site is made for demonstration purposes. No products are actually for sale.</p>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-7">
@@ -103,7 +103,7 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="header__logo">
-                        <h3 style="font-family: Lucida Handwriting, Cursive">Fine Stringed Instruments</h3>
+                        <a a asp-action="Index" asp-controller="Home"> <h3 style="font-family: Lucida Handwriting, Cursive">Fine Stringed Instruments</h3></a>
                         
                     </div>
                 </div>
@@ -112,16 +112,28 @@
                         <ul>
                             <li><a asp-action="Index" asp-controller="Home">Home</a></li>
                             <li><a asp-action="TiledProducts" asp-controller="Products">Shop</a></li>
-                            <li>
-                                <a>Site Administration</a>
-                                <ul class="dropdown">
-                                    <li><a asp-action="Index" asp-controller="Products">Products</a></li>
-                                    <li><a asp-action="Index" asp-controller="Orders">Orders</a></li>
-                                    <li><a asp-action="Index" asp-controller="Builders">Builders</a></li>
-                                    <li><a asp-action="Index" asp-controller="Types">Types</a></li>
-                                    <li><a href="#">User Managment</a></li>
-                                </ul>
-                            </li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li>
+
+                                    <a>Site Administration</a>
+                                    <ul class="dropdown">
+                                        <li><a asp-action="Index" asp-controller="Products">Products</a></li>
+                                        <li><a asp-action="Index" asp-controller="Orders">Orders</a></li>
+                                        <li><a asp-action="Index" asp-controller="Builders">Builders</a></li>
+                                        <li><a asp-action="Index" asp-controller="Types">Types</a></li>
+                                        <li><a asp-action="Index" asp-controller="Status">Status</a></li>
+                                        <li><a asp-action="ListUsers" asp-controller="Administration">Users</a></li>
+                                        <li><a asp-action="ListRoles" asp-controller="Administration">Roles</a></li>
+
+
+
+
+
+
+                                    </ul>
+                                </li>
+                            }
                             <li><a asp-action="Contact" asp-controller="Home">Contact Us</a></li>
                         </ul>
                     </nav>
@@ -186,7 +198,7 @@
                             <h3 class="text-white"style="font-family: Lucida Handwriting, Cursive">Fine Stringed Instruments</h3>
                         </div>
                         <p>Thank you for visiting if you have any questions, please see our contact page.</p>
-                        <a href="#"><img src="img/payment.png" alt=""></a>
+                        <a href="javascript:void(0)"><img src="~/img/payment.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
@@ -198,9 +210,9 @@
                         <ul>
                             <li>
                             <li><a asp-action="Contact" asp-controller="Home">Contact Us</a></li></li>
-                            <li><a href="#">Payment Methods</a></li>
-                            <li><a href="#">Delivary</a></li>
-                            <li><a href="#">Return & Exchanges</a></li>
+                            <li><a href="javascript:void(0)">Payment Methods</a></li>
+                            <li><a href="javascript:void(0)">Delivary</a></li>
+                            <li><a href="javascript:void(0)">Return & Exchanges</a></li>
                         </ul>
                     </div>
                 </div>
@@ -208,7 +220,7 @@
                     <div class="footer__widget">
                         <h6>NewLetter</h6>
                         <div class="footer__newslatter">
-                            <p>Be the first to know about new arrivals, look books, sales & promos!</p>
+                            <p>Be the first to know about new arrivals and special deals!</p>
                             <form action="#">
                                 <input type="text" placeholder="Your email">
                                 <button type="submit"><span class="icon_mail_alt"></span></button>
