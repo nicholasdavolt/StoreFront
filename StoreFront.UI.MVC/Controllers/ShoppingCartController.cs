@@ -97,7 +97,7 @@ namespace StoreFront.UI.MVC.Controllers
 
             HttpContext.Session.SetString("cart", jsonCart);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("TiledProducts" , "Products");
         }
 
         public IActionResult RemoveFromCart (int id)

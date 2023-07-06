@@ -32,7 +32,7 @@ namespace StoreFront.UI.MVC.Controllers
         
         public async Task<IActionResult> Index()
         {
-            var guitarShopContext = _context.Products.Include(p => p.Builder).Include(p => p.Status).Include(p => p.Type);
+            var guitarShopContext = _context.Products.Include(p => p.Builder).Include(p => p.Status).Include(p => p.Type).Include(p => p.OrderProducts);
             return View(await guitarShopContext.ToListAsync());
         }
         [AllowAnonymous]

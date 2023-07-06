@@ -76,8 +76,17 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                
+                    @if(item.OrderProducts.Count() == 0)
+                    {
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                    else
+                    {
+                        <a disabled="true" class="text-danger" style="text-decoration: line-through;" title="Can't delete - referenced by other records" >
+                            Delete
+                        </a>
+                    }
+
             </td>
         </tr>
 }
