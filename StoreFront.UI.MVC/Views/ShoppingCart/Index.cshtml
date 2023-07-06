@@ -38,10 +38,10 @@
                                 <img src="~/img/t_@item.Value.Product.ProductImage" alt="@item.Value.Product.ProductName">
                             </td>
                             <td>
-                                <form asp-action="UpdateCart">
+                                <form asp-action="UpdateCart" class="text-center">
                                     <input type="hidden" name="productId" value="@item.Key">
                                     <input type="number" name="qty" value="@item.Value.Qty" class="form-control d-block mx-auto text-center w-50" min="1" max="@item.Value.Product.UnitsInStock">
-                                    <input type="submit" value="Update Cart" class="btn btn-primary btn-sm">
+                                    <input type="submit" value="Update Cart" class="btn btn-primary btn-sm mt-2">
 
                                 </form>
                             </td>

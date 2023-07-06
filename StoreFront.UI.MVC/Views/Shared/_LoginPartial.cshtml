@@ -6,14 +6,15 @@
 @*<ul class="navbar-nav">*@
 @if (SignInManager.IsSignedIn(User))
 {
+
     @*<li class="nav-item">*@
-        <a  class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
+        <a  class="nav-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" style="display: inline">Hello @User.Identity?.Name!</a>
     @*</li>*@
     @*<li class="nav-item">*@
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-white">Logout</button>
-        </form>
-    <a class="nav-link" asp-action="OrderByUser" asp-controller="Orders" asp-route-id="@UserManager.GetUserId(User)">Your Orders</a>
+    @*<form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">*@
+    <a type="submit" class="btn btn-link text-white nav-item" style="display: inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">Logout</a>
+        @*</form>*@
+    <a class="nav-item" asp-action="OrderByUser" asp-controller="Orders" asp-route-id="@UserManager.GetUserId(User)">Your Orders</a>
         
     @*</li>*@
 }
